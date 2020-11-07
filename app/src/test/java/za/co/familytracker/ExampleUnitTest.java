@@ -1,4 +1,4 @@
-package com.example.familytracker;
+package za.co.familytracker;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.familytracker;
+package za.co.familytracker;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
