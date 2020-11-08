@@ -1,4 +1,4 @@
-package za.co.familytracker.za.co.familytracker.utils;
+package za.co.familytracker.utils;
 
 import android.content.Context;
 import android.widget.Toast;

@@ -1,106 +1,119 @@
 package za.co.familytracker;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import za.co.familytracker.nav.DevicesFrag;
+import za.co.familytracker.nav.FamilyFrag;
+import za.co.familytracker.nav.MeFrag;
+import za.co.familytracker.services.DeviceService;
+import za.co.familytracker.utils.FragmentUtils;
 
-import com.example.familytracker.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import za.co.familytracker.za.co.familytracker.utils.DTUtils;
-import za.co.familytracker.za.co.familytracker.utils.GeneralUtils;
-
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener
+public class MainActivity extends AppCompatActivity
 {
     private final String TAG = "MainActivity";
-
-    private GoogleMap map;
-    private Marker marker;
-
-    LocationManager locationManager;
+    private ImageButton btnMe;
+    private ImageButton btnFamily;
+    private ImageButton btnDevices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setLocationManager();
+        wireUI();
 
-        SupportMapFragment  mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if(mapFragment != null)
-        {
-            mapFragment.getMapAsync(this);
-        }
+        startService(new Intent(this, DeviceService.class));
+
+        addBtnFamilyListener();
+        addBtnDevicesListener();
+        addBtnMeListener();
+
+        FamilyFrag familyFrag = new FamilyFrag();
+        FragmentUtils.startFragment(getSupportFragmentManager(), familyFrag, R.id.fragContainer, getSupportActionBar(), "Family", true, false, true, null);
+        setNavIcons(true, false, false);
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap)
+    private void wireUI()
     {
-        this.map = googleMap;
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
     }
 
-    private void setLocationManager()
+    private void addBtnDevicesListener()
     {
-        try
-        {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, MainActivity.this);
-        } catch (SecurityException e)
-        {
-            Log.e(TAG, "Error: " + e.getMessage() +
-                    "\nMethod: LocationUtils - startLocationManager" +
-                    "\nCreatedTime: " + DTUtils.getCurrentDateTime());
-        }
-    }
+        this.btnDevices = (ImageButton) findViewById(R.id.btnDevices);
+        this.btnDevices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNavIcons(false, true, false);
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if(location != null)
-        {
-            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(myLocation)
-                    .title("Me");
-
-            if(this.marker == null)
-            {
-                this.marker = this.map.addMarker(markerOptions);
-            }else
-            {
-                marker.setPosition(myLocation);
+                DevicesFrag devicesFrag = new DevicesFrag();
+                FragmentUtils.startFragment(getSupportFragmentManager(), devicesFrag, R.id.fragContainer, getSupportActionBar(), "Devices", true, false, true, null);
             }
+        });
+    }
 
-            this.map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+    private void addBtnFamilyListener()
+    {
+        this.btnFamily = (ImageButton) findViewById(R.id.btnFamily);
+        this.btnFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNavIcons(true, false, false);
+
+                FamilyFrag familyFrag = new FamilyFrag();
+                FragmentUtils.startFragment(getSupportFragmentManager(), familyFrag, R.id.fragContainer, getSupportActionBar(), "Family", true, false, true, null);
+            }
+        });
+    }
+
+    private void addBtnMeListener()
+    {
+        this.btnMe = (ImageButton) findViewById(R.id.btnMe);
+        this.btnMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNavIcons(false, false, true);
+
+                MeFrag meFrag = new MeFrag();
+                FragmentUtils.startFragment(getSupportFragmentManager(), meFrag, R.id.fragContainer, getSupportActionBar(), "Me", true, false, true, null);
+            }
+        });
+    }
+
+    public void setNavIcons(boolean isFamily, boolean isDevices, boolean isMe)
+    {
+        if(isFamily)
+        {
+            this.btnFamily.setBackgroundResource(R.drawable.ic_people_black_24dp);
+        }else
+        {
+            this.btnFamily.setBackgroundResource(R.drawable.ic_people_black_white_24dp);
         }
 
-    }
+        if(isDevices)
+        {
+            this.btnDevices.setBackgroundResource(R.drawable.ic_devices_black_24dp);
+        }else
+        {
+            this.btnDevices.setBackgroundResource(R.drawable.ic_devices_black_white_24dp);
+        }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+        if(isMe)
+        {
+            this.btnMe.setBackgroundResource(R.drawable.ic_account_circle_black_24dp);
+        }else
+        {
+            this.btnMe.setBackgroundResource(R.drawable.ic_account_circle_black_white_24dp);
+        }
 
-    }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
 
     }
 }
