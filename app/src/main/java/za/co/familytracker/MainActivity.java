@@ -1,7 +1,15 @@
 package za.co.familytracker;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+
 import com.example.familytracker.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,9 +18,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+import za.co.familytracker.za.co.familytracker.utils.ConstantUtils;
+import za.co.familytracker.za.co.familytracker.utils.GeneralUtils;
+import za.co.familytracker.za.co.familytracker.utils.LocationUtils;
+
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
+
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +54,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(myLocation)
                 .title("Me"));
         this.map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+        final LocationUtils locationUtils = new LocationUtils(this);
+
+        handler = new Handler();
+
+        handler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                if(locationUtils.getCurrentLocation() != null)
+                {
+                    GeneralUtils.makeToast(getApplicationContext(), Double.toString(locationUtils.getCurrentLocation().getLatitude()));
+                }
+
+                handler.postDelayed(this, ConstantUtils.MAP_REFRESH_TIME);
+            }
+        }, ConstantUtils.MAP_REFRESH_TIME);
     }
+
 }
