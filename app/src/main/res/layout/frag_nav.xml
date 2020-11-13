@@ -7,6 +7,13 @@
     android:background="@color/darkblue"
     android:layout_height="wrap_content">
 
+    <View
+        android:id="@+id/horizontalDividerAppBar"
+        style="@style/CommonHorizontalDivider"
+        android:paddingTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/btnFamily"
@@ -21,7 +28,7 @@
         android:contentDescription="@string/dummy_text"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintEnd_toStartOf="@id/btnDevices"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar" />
 
     <ImageButton
         android:id="@+id/btnDevices"

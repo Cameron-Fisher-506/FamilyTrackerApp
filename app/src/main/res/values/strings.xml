@@ -3,4 +3,7 @@
 
     <string name="dummy_text">dummy</string>
     <string name="me">Me</string>
+    <string name="name">Name</string>
+    <string name="imei">imei</string>
+    <string name="device">Device</string>
 </resources>
