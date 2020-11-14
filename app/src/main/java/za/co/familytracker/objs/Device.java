@@ -99,4 +99,47 @@ public class Device
 
         }
     }
+
+    public JSONObject toJSON()
+    {
+        JSONObject toReturn = new JSONObject();
+        try
+        {
+            toReturn.put("name", this.name);
+            toReturn.put("imei", this.imei);
+            toReturn.put("createdTime", this.createdTime);
+
+            if(this.coordinate != null)
+            {
+                JSONObject jsonObjectCoordinate  = new JSONObject();
+                jsonObjectCoordinate.put("latitude", this.coordinate.getLatitude());
+                jsonObjectCoordinate.put("longitude", this.coordinate.getLongitude());
+                jsonObjectCoordinate.put("speed", this.coordinate.getSpeed());
+                jsonObjectCoordinate.put("accuracy", this.coordinate.getAccuracy());
+                jsonObjectCoordinate.put("bearing", this.coordinate.getBearing());
+                jsonObjectCoordinate.put("createdTimer", this.coordinate.getCreatedTime());
+
+                toReturn.put("coordinate", jsonObjectCoordinate);
+            }
+
+            if(this.health != null)
+            {
+                JSONObject jsonObjectHealth = new JSONObject();
+                jsonObjectHealth.put("batteryLife", this.health.getBatteryLife());
+                jsonObjectHealth.put("signalStrength", this.health.getSignalStrength());
+                jsonObjectHealth.put("createdTime", this.health.getCreatedTime());
+
+                toReturn.put("health", jsonObjectHealth);
+            }
+
+        }catch (Exception e)
+        {
+            Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                    + "\nMethod: Device - toJSON"
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+        }
+
+
+        return toReturn;
+    }
 }

@@ -1,5 +1,6 @@
 package za.co.familytracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -8,11 +9,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import org.json.JSONObject;
-
+import za.co.familytracker.dialogs.LinkDeviceCallback;
+import za.co.familytracker.menu.ShareMyLocationFrag;
 import za.co.familytracker.nav.DevicesFrag;
 import za.co.familytracker.nav.FamilyFrag;
 import za.co.familytracker.nav.MeFrag;
@@ -51,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
         addBtnDevicesListener();
         addBtnMeListener();
 
-        FamilyFrag familyFrag = new FamilyFrag();
-        FragmentUtils.startFragment(getSupportFragmentManager(), familyFrag, R.id.fragContainer, getSupportActionBar(), "Family", true, false, true, null);
-        setNavIcons(true, false, false);
+        MeFrag meFrag = new MeFrag();
+        FragmentUtils.startFragment(getSupportFragmentManager(), meFrag, R.id.fragContainer, getSupportActionBar(), "Me", true, false, true, null);
+        setNavIcons(false, false, true);
 
         // ATTENTION: This was auto-generated to handle app links.
         Intent appLinkIntent = getIntent();
@@ -62,10 +67,52 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
         if(appLinkData != null)
         {
-            String imeiToLink = appLinkData.getLastPathSegment();
-            String imei = DeviceUtils.getIMEI(this);
-            linkDevice(imei, imeiToLink);
+            final String imeiToLink = appLinkData.getLastPathSegment();
+            final String imei = DeviceUtils.getIMEI(this);
+
+            if(imeiToLink != null)
+            {
+                GeneralUtils.createAlertDialog(this, "Track Device", "Do you want to track this device (" + imeiToLink +")?", true, new LinkDeviceCallback() {
+                    @Override
+                    public void linkDevice(String name) {
+
+                        linkDeviceToMonitor(name, imei,imeiToLink);
+
+                    }
+                }).show();
+            }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflate = getMenuInflater();
+        inflate.inflate(R.menu.menu, menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId())
+        {
+            case R.id.shareMyLocation:
+            {
+
+                ShareMyLocationFrag shareMyLocationFrag = new ShareMyLocationFrag();
+                FragmentUtils.startFragment(getSupportFragmentManager(), shareMyLocationFrag, R.id.fragContainer, getSupportActionBar(), "Share My Location", true, false, true, null);
+
+                break;
+            }
+            default:
+            {
+                //unknown
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void createDevice()
@@ -93,38 +140,48 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
         }
     }
 
-    private void linkDevice(String imei, String imeiToLink)
+    private void linkDeviceToMonitor(String name, String imei, String imeiToLink)
     {
-        if(imei != null)
+
+        if(name != null)
         {
-            if(imeiToLink != null)
+            if(imei != null)
             {
-                try
+                if(imeiToLink != null)
                 {
-                    JSONObject body = new JSONObject();
-                    body.put("imei", imei);
-                    body.put("imeiToLink", imeiToLink);
+                    try
+                    {
+                        JSONObject body = new JSONObject();
+                        body.put("name", name);
+                        body.put("imei", imei);
+                        body.put("imeiToLink", imeiToLink);
 
-                    WSCallsUtils.post(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/linkDevice", body.toString(), REQ_CODE_LINK_DEVICE);
+                        WSCallsUtils.post(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/linkDevice", body.toString(), REQ_CODE_LINK_DEVICE);
 
 
-                }catch(Exception e)
+                    }catch(Exception e)
+                    {
+                        Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                                + "\nMethod: WSCallsUtils - doInBackground"
+                                + "\nIMEI: " + imei
+                                + "imeiToLink: " + imeiToLink
+                                + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+                    }
+                }else
                 {
-                    Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
-                            + "\nMethod: WSCallsUtils - doInBackground"
-                            + "\nIMEI: " + imei
-                            + "imeiToLink: " + imeiToLink
-                            + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+                    GeneralUtils.makeToast(this, "imeiToLink is null");
                 }
+
             }else
             {
-                GeneralUtils.makeToast(this, "imeiToLink is null");
+                GeneralUtils.makeToast(this, "IMEI is null");
             }
-
         }else
         {
-            GeneralUtils.makeToast(this, "IMEI is null");
+            GeneralUtils.makeToast(this, "Name is null");
         }
+
+
     }
 
     private void wireUI()

@@ -19,15 +19,11 @@
         android:id="@+id/btnFamily"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginStart="50dp"
         android:background="@drawable/ic_people_black_24dp"
         android:contentDescription="@string/dummy_text"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintEnd_toStartOf="@id/btnDevices"
+        app:layout_constraintStart_toEndOf="@id/btnDevices"
         app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar" />
 
     <ImageButton
@@ -42,19 +38,23 @@
         android:background="@drawable/ic_devices_black_24dp"
         android:contentDescription="@string/dummy_text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageButton
         android:id="@+id/btnMe"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:background="@drawable/ic_account_circle_black_24dp"
         android:contentDescription="@string/dummy_text"
-        app:layout_constraintStart_toEndOf="@id/btnDevices"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnDevices"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar"
         />
 
 

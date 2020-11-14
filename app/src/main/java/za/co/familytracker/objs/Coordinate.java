@@ -1,7 +1,5 @@
 package za.co.familytracker.objs;
 
-import za.co.familytracker.utils.DTUtils;
-
 public class Coordinate
 {
     private String latitude;
@@ -14,6 +12,9 @@ public class Coordinate
     public Coordinate(String latitude, String longitude, String bearing, String speed, String accuracy, String createdTime) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.bearing = bearing;
+        this.speed = speed;
+        this.accuracy = accuracy;
         this.createdTime = createdTime;
     }
     public String getLatitude() {
@@ -58,4 +59,5 @@ public class Coordinate
     public void setAccuracy(String accuracy) {
         this.accuracy = accuracy;
     }
+
 }

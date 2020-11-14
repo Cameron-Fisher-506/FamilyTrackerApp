@@ -26,11 +26,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import za.co.familytracker.MainActivity;
 import za.co.familytracker.R;
 import za.co.familytracker.objs.Device;
 import za.co.familytracker.utils.ConstantUtils;
 import za.co.familytracker.utils.DTUtils;
 import za.co.familytracker.utils.DeviceUtils;
+import za.co.familytracker.utils.FragmentUtils;
 import za.co.familytracker.utils.GeneralUtils;
 import za.co.familytracker.utils.LocationUtils;
 import za.co.familytracker.utils.StringUtils;
@@ -145,14 +147,13 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
 
                 Device device = (Device) adapter.getItemAtPosition(position);
 
+                Bundle bundle = new Bundle();
+                bundle.putString("device", device.toJSON().toString());
 
-               /* Bundle bundle = new Bundle();
-                bundle.putString("device", );
+                MapFrag mapFrag = new MapFrag();
+                mapFrag.setArguments(bundle);
 
-                MovieFrag movieFrag = new MovieFrag();
-                movieFrag.setArguments(bundle);
-
-                FragmentUtils.startFragment(((MainActivity)getActivity()).getSupportFragmentManager(), movieFrag, R.id.fragContainer, ((MainActivity)getActivity()).getSupportActionBar(), movie.getTitle(), true, false, true, null);*/
+                FragmentUtils.startFragment(((MainActivity)getActivity()).getSupportFragmentManager(), mapFrag, R.id.fragContainer, ((MainActivity)getActivity()).getSupportActionBar(), device.getName(), true, false, true, null);
             }
         });
     }

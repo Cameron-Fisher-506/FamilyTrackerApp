@@ -1,8 +1,5 @@
 package za.co.familytracker.nav;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,21 +19,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import za.co.familytracker.MainActivity;
+import org.json.JSONObject;
 import za.co.familytracker.R;
 import za.co.familytracker.objs.Device;
 import za.co.familytracker.utils.ConstantUtils;
 import za.co.familytracker.utils.DTUtils;
-import za.co.familytracker.utils.DeviceUtils;
 import za.co.familytracker.utils.LocationUtils;
 
-
-public class MeFrag extends Fragment implements OnMapReadyCallback, LocationListener
+public class MapFrag extends Fragment implements OnMapReadyCallback
 {
     private GoogleMap map;
     private Marker marker;
-
-    private LocationManager locationManager;
 
     private TextView txtAddress;
     private TextView txtSpeed;
@@ -45,14 +37,32 @@ public class MeFrag extends Fragment implements OnMapReadyCallback, LocationList
     private TextView txtSignal;
     private TextView txtAccuracy;
 
+    private Device device;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_me, container, false);
-
-        setLocationManager();
+        View view = inflater.inflate(R.layout.frag_map, container, false);
 
         wireUI(view);
+
+        String strDevice = getArguments().getString("device");
+
+        if(strDevice != null)
+        {
+            try
+            {
+                JSONObject jsonObjectDevice = new JSONObject(strDevice);
+                this.device = new Device();
+                this.device.populate(jsonObjectDevice);
+
+            }catch(Exception e)
+            {
+                Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                        + "\nMethod: MapFrag - onCreateView"
+                        + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+            }
+        }
 
         return view;
     }
@@ -77,93 +87,54 @@ public class MeFrag extends Fragment implements OnMapReadyCallback, LocationList
         this.txtSignal = (TextView) view.findViewById(R.id.txtSignal);
     }
 
-    private void setLocationManager()
-    {
-        try
-        {
-            locationManager = (LocationManager) ((MainActivity)getActivity()).getSystemService(Context.LOCATION_SERVICE);
-            if(locationManager != null)
-            {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5,this);
-            }
-
-        } catch (SecurityException e)
-        {
-            Log.e(ConstantUtils.TAG, "Error: " + e.getMessage() +
-                    "\nMethod: LocationUtils - startLocationManager" +
-                    "\nCreatedTime: " + DTUtils.getCurrentDateTime());
-        }
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
         this.map = googleMap;
         this.map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity().getApplicationContext(), R.raw.map_in_night));
 
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        if(this.map != null && location != null)
+        if(this.map != null && this.device != null && this.device.getCoordinate() != null)
         {
-            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng location = new LatLng(Double.parseDouble(this.device.getCoordinate().getLatitude()), Double.parseDouble(this.device.getCoordinate().getLongitude()));
             MarkerOptions markerOptions = new MarkerOptions()
-                    .position(myLocation)
-                    .title("Me")
-                    .snippet(LocationUtils.getAddress(getContext(), myLocation));
-
+                    .position(location)
+                    .title(this.device.getName())
+                    .snippet(LocationUtils.getAddress(getContext(), location));
 
             if(this.marker == null)
             {
                 this.marker = this.map.addMarker(markerOptions);
             }else
             {
-                marker.setPosition(myLocation);
+                marker.setPosition(location);
             }
-
             this.marker.showInfoWindow();
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(myLocation)      // Sets the center of the map to location user
+                    .target(location)      // Sets the center of the map to location user
                     .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-            this.txtSpeed.setText(LocationUtils.msToKmh((double)location.getSpeed()) + " km/h");
+            txtSpeed.setText(LocationUtils.msToKmh(Double.parseDouble(this.device.getCoordinate().getSpeed())) + " km/h");
 
-            String batteryLife = DeviceUtils.getBatteryLevel(getContext());
+            String batteryLife = this.device.getHealth().getBatteryLife();
             if(batteryLife != null)
             {
                 this.txtBattery.setText(batteryLife);
             }
 
-            String signalStrength = DeviceUtils.getNetworkType(getContext());
+            String signalStrength = this.device.getHealth().getSignalStrength();
             if(signalStrength != null)
             {
                 this.txtSignal.setText(signalStrength);
             }
 
-            /*txtAccuracy.setText("Accuracy: " + location.getAccuracy());
-            txtAddress.setText(LocationUtils.getAddress(getContext(), myLocation));*/
+
         }
 
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

@@ -122,5 +122,17 @@ public class LocationUtils {
         return toReturn;
     }
 
+    public static Double msToKmh(Double ms)
+    {
+        Double toReturn = null;
+
+        if(ms != null)
+        {
+           toReturn = MathUtils.precision(ms * 3.6);
+        }
+
+        return toReturn;
+    }
+
 }
 

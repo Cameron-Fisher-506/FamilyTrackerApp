@@ -6,6 +6,7 @@
     app:theme="@style/CustomToolbarStyle"
     app:popupTheme="@style/CustomPopupStyle"
     android:background="@color/darkblue"
+
     >
 
 </androidx.appcompat.widget.Toolbar>

@@ -11,24 +11,15 @@
        layout="@layout/app_bar"
        app:layout_constraintTop_toTopOf="parent" />
 
-   <ScrollView
-       android:id="@+id/fragContainerScroll"
+   <FrameLayout
+       android:id="@+id/fragContainer"
        android:layout_width="match_parent"
        android:layout_height="0dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/app_bar"
        app:layout_constraintBottom_toTopOf="@+id/navContainer"
-         >
-
-      <FrameLayout
-          android:id="@+id/fragContainer"
-          android:layout_width="match_parent"
-          android:layout_height="0dp"
-          app:layout_constraintBottom_toTopOf="@+id/fragContainerScroll"
-          app:layout_constraintTop_toBottomOf="@+id/fragContainerScroll"
-          tools:layout_editor_absoluteX="26dp">
-
-
-      </FrameLayout>
-   </ScrollView>
+      />
 
    <include
        android:id="@+id/navContainer"

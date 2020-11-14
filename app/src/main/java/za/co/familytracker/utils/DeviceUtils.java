@@ -70,44 +70,74 @@ public class DeviceUtils
 
     public static String getNetworkType(Context context)
     {
-        TelephonyManager teleMan = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        int networkType = teleMan.getNetworkType();
-        switch (networkType)
+        String toReturn = null;
+
+        try
         {
-            case TelephonyManager.NETWORK_TYPE_1xRTT:
-                return "1xRTT";
-            case TelephonyManager.NETWORK_TYPE_CDMA:
-                return "CDMA";
-            case TelephonyManager.NETWORK_TYPE_EDGE:
-                return "EDGE";
-            case TelephonyManager.NETWORK_TYPE_EHRPD:
-                return "eHRPD";
-            case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                return "EVDO rev. 0";
-            case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                return "EVDO rev. A";
-            case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                return "EVDO rev. B";
-            case TelephonyManager.NETWORK_TYPE_GPRS:
-                return "GPRS";
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
-                return "HSDPA";
-            case TelephonyManager.NETWORK_TYPE_HSPA:
-                return "HSPA";
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
-                return "HSPA+";
-            case TelephonyManager.NETWORK_TYPE_HSUPA:
-                return "HSUPA";
-            case TelephonyManager.NETWORK_TYPE_IDEN:
-                return "iDen";
-            case TelephonyManager.NETWORK_TYPE_LTE:
-                return "LTE";
-            case TelephonyManager.NETWORK_TYPE_UMTS:
-                return "UMTS";
-            case TelephonyManager.NETWORK_TYPE_UNKNOWN:
-                return "Unknown";
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if(telephonyManager != null)
+            {
+                int networkType = telephonyManager.getNetworkType();
+                switch (networkType)
+                {
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                        toReturn = "1xRTT";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                        toReturn = "CDMA";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                        toReturn = "EDGE";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:
+                        toReturn = "eHRPD";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                        toReturn = "EVDO rev. 0";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                        toReturn = "EVDO rev. A";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                        toReturn = "EVDO rev. B";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                        toReturn = "GPRS";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                        toReturn = "HSDPA";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                        toReturn = "HSPA";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        toReturn = "HSPA+";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                        toReturn = "HSUPA";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_IDEN:
+                        toReturn = "iDen";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_LTE:
+                        toReturn = "LTE";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                        toReturn = "UMTS";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_UNKNOWN:
+                        toReturn = "Unknown";
+                        break;
+                }
+            }
+        }catch (Exception e)
+        {
+            Log.d(ConstantUtils.TAG, "Method: DeviceUtils - getNetworkType"
+                    + "\nMessage: " + e.getMessage()
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
         }
-        return "*";
+
+        return toReturn;
     }
 
     public static Boolean isRoaming(Context context)
