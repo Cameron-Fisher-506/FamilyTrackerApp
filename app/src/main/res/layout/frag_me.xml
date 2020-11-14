@@ -18,7 +18,7 @@
         android:id="@+id/imgSpeed"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/ic_directions_car_black_24dp"
         android:contentDescription="@string/dummy_text"
@@ -29,7 +29,7 @@
         android:id="@+id/txtSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="15dp"
         android:text="N/A"
         android:textColor="@color/white"
@@ -54,8 +54,8 @@
         android:id="@+id/imgSignal"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/ic_network_cell_black_24dp"
         android:contentDescription="@string/dummy_text"
         app:layout_constraintStart_toEndOf="@+id/txtBattery"
@@ -86,7 +86,7 @@
         android:id="@+id/imgBattery"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/ic_battery_full_black_24dp"
         android:contentDescription="@string/dummy_text"
@@ -107,28 +107,28 @@
         app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar" />
 
 
-    <!--<ImageView
-        android:id="@+id/imgAddress"
+    <ImageView
+        android:id="@+id/imgLastSeen"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/ic_my_location_black_24dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_access_time_black_24dp"
         android:contentDescription="@string/dummy_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAccuracy" />
+        app:layout_constraintStart_toEndOf="@+id/txtSignal"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar" />
 
     <TextView
-        android:id="@+id/txtAddress"
+        android:id="@+id/txtLastSeen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="15dp"
-        android:text="Address: "
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="14dp"
+        android:text="N/A"
         android:maxLines="2"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imgAddress"
-        app:layout_constraintTop_toBottomOf="@+id/txtAccuracy" />-->
+        app:layout_constraintStart_toEndOf="@+id/imgLastSeen"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalDividerAppBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

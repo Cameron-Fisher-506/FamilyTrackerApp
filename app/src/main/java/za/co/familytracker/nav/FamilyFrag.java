@@ -276,6 +276,7 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
                     if(jsonObject != null && jsonObject.has("code") && jsonObject.has("message"))
                     {
                         int code = jsonObject.getInt("code");
+                        String title = jsonObject.getString("title");
                         String message = jsonObject.getString("message");
 
                         if(code == 0)
@@ -305,10 +306,10 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
                             }
                         }else if(code == 1)
                         {
-                            GeneralUtils.makeToast(getContext(), message);
+                            GeneralUtils.makeToast(getContext(), title + " " + message);
                         }else if(code == -1)
                         {
-                            GeneralUtils.makeToast(getContext(), message);
+                            GeneralUtils.makeToast(getContext(), title + " " + message);
                         }
                     }
                 }catch(Exception e)

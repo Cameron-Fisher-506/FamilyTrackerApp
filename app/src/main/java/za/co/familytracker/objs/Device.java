@@ -76,7 +76,7 @@ public class Device
                     String speed = jsonObjectCoordinate.has("speed") ? jsonObjectCoordinate.getString("speed") : null;
                     String bearing = jsonObjectCoordinate.has("bearing") ? jsonObjectCoordinate.getString("bearing") : null;
                     String accuracy = jsonObjectCoordinate.has("accuracy") ? jsonObjectCoordinate.getString("accuracy") : null;
-                    String createdTime = jsonObjectCoordinate.has("createdTimer") ? jsonObjectCoordinate.getString("createdTime") : null;
+                    String createdTime = jsonObjectCoordinate.has("createdTime") ? jsonObjectCoordinate.getString("createdTime") : null;
 
                     this.coordinate = new Coordinate(latitude, longitude, bearing, speed, accuracy, createdTime);
                 }
@@ -117,7 +117,7 @@ public class Device
                 jsonObjectCoordinate.put("speed", this.coordinate.getSpeed());
                 jsonObjectCoordinate.put("accuracy", this.coordinate.getAccuracy());
                 jsonObjectCoordinate.put("bearing", this.coordinate.getBearing());
-                jsonObjectCoordinate.put("createdTimer", this.coordinate.getCreatedTime());
+                jsonObjectCoordinate.put("createdTime", this.coordinate.getCreatedTime());
 
                 toReturn.put("coordinate", jsonObjectCoordinate);
             }

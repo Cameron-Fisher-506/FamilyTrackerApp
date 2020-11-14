@@ -43,7 +43,7 @@ public class MeFrag extends Fragment implements OnMapReadyCallback, LocationList
     private TextView txtSpeed;
     private TextView txtBattery;
     private TextView txtSignal;
-    private TextView txtAccuracy;
+    private TextView txtLastSeen;
 
     @Nullable
     @Override
@@ -70,8 +70,8 @@ public class MeFrag extends Fragment implements OnMapReadyCallback, LocationList
             mapFragment.getMapAsync(this);
         }
 
-        /*txtAddress = (TextView) view.findViewById(R.id.txtAddress);
-        txtAccuracy = (TextView) view.findViewById(R.id.txtAccuracy);*/
+        //txtAddress = (TextView) view.findViewById(R.id.txtAddress);
+        this.txtLastSeen = (TextView) view.findViewById(R.id.txtLastSeen);
         this.txtSpeed = (TextView) view.findViewById(R.id.txtSpeed);
         this.txtBattery = (TextView) view.findViewById(R.id.txtBattery);
         this.txtSignal = (TextView) view.findViewById(R.id.txtSignal);
@@ -138,16 +138,28 @@ public class MeFrag extends Fragment implements OnMapReadyCallback, LocationList
             if(batteryLife != null)
             {
                 this.txtBattery.setText(batteryLife);
+            }else
+            {
+                this.txtBattery.setText("N/A");
             }
 
             String signalStrength = DeviceUtils.getNetworkType(getContext());
             if(signalStrength != null)
             {
                 this.txtSignal.setText(signalStrength);
+            }else
+            {
+                this.txtSignal.setText("N/A");
             }
 
-            /*txtAccuracy.setText("Accuracy: " + location.getAccuracy());
-            txtAddress.setText(LocationUtils.getAddress(getContext(), myLocation));*/
+            String lastSeen = DTUtils.getCurrentDateTime();
+            if(lastSeen != null)
+            {
+                this.txtLastSeen.setText(lastSeen);
+            }else
+            {
+                this.txtLastSeen.setText("N/A");
+            }
         }
 
     }
