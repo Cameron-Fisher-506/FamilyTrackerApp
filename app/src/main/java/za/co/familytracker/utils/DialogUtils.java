@@ -3,23 +3,14 @@ package za.co.familytracker.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import za.co.familytracker.BuildConfig;
 import za.co.familytracker.dialogs.LinkDeviceCallback;
+import za.co.familytracker.dialogs.PermissionCallback;
 
-public class GeneralUtils
+public class DialogUtils
 {
-    public static void makeToast(Context context, String message)
-    {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-    }
-
     public static AlertDialog createAlertDialog(Context context, String title, String message, boolean isPrompt, final LinkDeviceCallback linkDeviceCallback)
     {
         AlertDialog toReturn = null;
@@ -83,10 +74,49 @@ public class GeneralUtils
 
     }
 
-    public static void openAppSettingsScreen(Context context)
+    public static AlertDialog createAlertPermission(Context context, String title, String message, boolean isPrompt, final PermissionCallback permissionCallback)
     {
-        Intent settingsIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-        settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(settingsIntent);
+        AlertDialog toReturn = null;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        if(isPrompt)
+        {
+            builder.setCancelable(true);
+            builder.setPositiveButton(
+                    "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            permissionCallback.checkPermission(true);
+                            dialog.cancel();
+                        }
+                    });
+
+            builder.setNegativeButton(
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+        }else
+        {
+            builder.setCancelable(false);
+            builder.setPositiveButton(
+                    "Okay",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+        }
+
+        toReturn = builder.create();
+
+        return toReturn;
+
     }
 }

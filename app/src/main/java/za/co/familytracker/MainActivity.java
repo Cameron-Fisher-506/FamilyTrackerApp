@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 
 import org.json.JSONObject;
 import za.co.familytracker.dialogs.LinkDeviceCallback;
+import za.co.familytracker.dialogs.PermissionCallback;
 import za.co.familytracker.menu.ShareMyLocationFrag;
 import za.co.familytracker.nav.DevicesFrag;
 import za.co.familytracker.nav.FamilyFrag;
@@ -25,6 +28,7 @@ import za.co.familytracker.services.DeviceService;
 import za.co.familytracker.utils.ConstantUtils;
 import za.co.familytracker.utils.DTUtils;
 import za.co.familytracker.utils.DeviceUtils;
+import za.co.familytracker.utils.DialogUtils;
 import za.co.familytracker.utils.FragmentUtils;
 import za.co.familytracker.utils.GeneralUtils;
 import za.co.familytracker.utils.StringUtils;
@@ -136,7 +140,15 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
             }
         }else
         {
-            GeneralUtils.makeToast(this, "IMEI is null");
+            DialogUtils.createAlertPermission(this, "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
+                @Override
+                public void checkPermission(boolean ischeckPermission) {
+                    if(ischeckPermission)
+                    {
+                        GeneralUtils.openAppSettingsScreen(getApplicationContext());
+                    }
+                }
+            }).show();
         }
     }
 
@@ -169,16 +181,24 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
                     }
                 }else
                 {
-                    GeneralUtils.makeToast(this, "imeiToLink is null");
+                    GeneralUtils.makeToast(this, "Partner's IMEI is not found!");
                 }
 
             }else
             {
-                GeneralUtils.makeToast(this, "IMEI is null");
+                DialogUtils.createAlertPermission(this, "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
+                    @Override
+                    public void checkPermission(boolean ischeckPermission) {
+                        if(ischeckPermission)
+                        {
+                            GeneralUtils.openAppSettingsScreen(getApplicationContext());
+                        }
+                    }
+                }).show();
             }
         }else
         {
-            GeneralUtils.makeToast(this, "Name is null");
+            GeneralUtils.makeToast(this, "Please enter a name to start tracking member!");
         }
 
 

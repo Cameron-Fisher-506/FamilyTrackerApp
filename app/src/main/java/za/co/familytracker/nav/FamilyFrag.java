@@ -28,10 +28,12 @@ import java.util.ArrayList;
 
 import za.co.familytracker.MainActivity;
 import za.co.familytracker.R;
+import za.co.familytracker.dialogs.PermissionCallback;
 import za.co.familytracker.objs.Device;
 import za.co.familytracker.utils.ConstantUtils;
 import za.co.familytracker.utils.DTUtils;
 import za.co.familytracker.utils.DeviceUtils;
+import za.co.familytracker.utils.DialogUtils;
 import za.co.familytracker.utils.FragmentUtils;
 import za.co.familytracker.utils.GeneralUtils;
 import za.co.familytracker.utils.LocationUtils;
@@ -74,7 +76,15 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
             WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getAllLinkedDevices/" + imei, REQ_CODE_GET_ALL_LINKED_DEVICES);
         }else
         {
-            GeneralUtils.makeToast(getContext(), "IMEI is null");
+            DialogUtils.createAlertPermission(getContext(), "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
+                @Override
+                public void checkPermission(boolean ischeckPermission) {
+                    if(ischeckPermission)
+                    {
+                        GeneralUtils.openAppSettingsScreen(getContext());
+                    }
+                }
+            }).show();
         }
 
     }

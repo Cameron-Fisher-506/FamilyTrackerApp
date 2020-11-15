@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment;
 
 import za.co.familytracker.MainActivity;
 import za.co.familytracker.R;
+import za.co.familytracker.dialogs.PermissionCallback;
 import za.co.familytracker.nav.MeFrag;
 import za.co.familytracker.utils.DeviceUtils;
+import za.co.familytracker.utils.DialogUtils;
 import za.co.familytracker.utils.FragmentUtils;
 import za.co.familytracker.utils.GeneralUtils;
 
@@ -37,7 +39,15 @@ public class ShareMyLocationFrag extends Fragment
             startActivity(shareIntent);
         }else
         {
-            GeneralUtils.createAlertDialog(getContext(), "Phone Permission", "Please enable phone permission for Family Tracker.", false, null).show();
+            DialogUtils.createAlertPermission(getContext(), "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
+                @Override
+                public void checkPermission(boolean ischeckPermission) {
+                    if(ischeckPermission)
+                    {
+                        GeneralUtils.openAppSettingsScreen(getContext());
+                    }
+                }
+            }).show();
         }
 
         MeFrag meFrag = new MeFrag();

@@ -106,7 +106,7 @@ public class MapFrag extends Fragment implements OnMapReadyCallback, WSCallsUtil
             WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getDeviceCoordinateHealth/" + this.device.getImei(), REQ_CODE_GET_DEVICE_COORDINATE_HEALTH);
         }else
         {
-            GeneralUtils.createAlertDialog(getContext(), this.device.getName() + "IMEI not found!", "Shane needs to update IMEI to track device!", false, null).show();
+            GeneralUtils.createAlertDialog(getContext(), this.device.getName() + "IMEI not found!", "Unable to track location!", false, null).show();
         }
 
     }
