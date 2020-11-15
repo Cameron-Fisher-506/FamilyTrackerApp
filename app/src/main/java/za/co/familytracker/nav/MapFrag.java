@@ -114,6 +114,12 @@ public class MapFrag extends Fragment implements OnMapReadyCallback, WSCallsUtil
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        if(this.timer != null)
+        {
+            this.timer.cancel();
+            this.timer.purge();
+        }
     }
 
     private void wireUI(View view)

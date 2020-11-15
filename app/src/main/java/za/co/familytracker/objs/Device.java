@@ -72,7 +72,7 @@ public class Device
                 {
                     JSONObject jsonObjectCoordinate = jsonObject.getJSONObject("coordinate");
                     String latitude = jsonObjectCoordinate.has("latitude") ? jsonObjectCoordinate.getString("latitude") : null;
-                    String longitude = jsonObjectCoordinate.has("latitude") ? jsonObjectCoordinate.getString("latitude") : null;
+                    String longitude = jsonObjectCoordinate.has("longitude") ? jsonObjectCoordinate.getString("longitude") : null;
                     String speed = jsonObjectCoordinate.has("speed") ? jsonObjectCoordinate.getString("speed") : null;
                     String bearing = jsonObjectCoordinate.has("bearing") ? jsonObjectCoordinate.getString("bearing") : null;
                     String accuracy = jsonObjectCoordinate.has("accuracy") ? jsonObjectCoordinate.getString("accuracy") : null;

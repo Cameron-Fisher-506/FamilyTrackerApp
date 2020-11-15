@@ -276,31 +276,23 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
 
     @Override
     public void taskCompleted(String response, int reqCode) {
-        if(response != null)
-        {
-            if(reqCode == REQ_CODE_GET_ALL_LINKED_DEVICES)
-            {
-                try
-                {
+        if (response != null) {
+            if (reqCode == REQ_CODE_GET_ALL_LINKED_DEVICES) {
+                try {
                     JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject != null && jsonObject.has("code") && jsonObject.has("message"))
-                    {
+                    if (jsonObject != null && jsonObject.has("code") && jsonObject.has("message")) {
                         int code = jsonObject.getInt("code");
                         String title = jsonObject.getString("title");
                         String message = jsonObject.getString("message");
 
-                        if(code == 0)
-                        {
+                        if (code == 0) {
                             GeneralUtils.makeToast(getContext(), message);
 
-                            if(jsonObject.has("devices"))
-                            {
+                            if (jsonObject.has("devices")) {
                                 JSONArray jsonArray = jsonObject.getJSONArray("devices");
-                                if(jsonArray != null && jsonArray.length() > 0)
-                                {
+                                if (jsonArray != null && jsonArray.length() > 0) {
                                     ArrayList<Device> devices = new ArrayList<>();
-                                    for(int i = 0; i < jsonArray.length(); i++)
-                                    {
+                                    for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObjectDevice = jsonArray.getJSONObject(i);
 
                                         Device device = new Device();
@@ -314,16 +306,13 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
                                     setLvDevices(getDeviceAdapter());
                                 }
                             }
-                        }else if(code == 1)
-                        {
+                        } else if (code == 1) {
                             GeneralUtils.makeToast(getContext(), title + " " + message);
-                        }else if(code == -1)
-                        {
+                        } else if (code == -1) {
                             GeneralUtils.makeToast(getContext(), title + " " + message);
                         }
                     }
-                }catch(Exception e)
-                {
+                } catch (Exception e) {
                     Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
                             + "\nMethod: WSCallsUtils - taskCompleted"
                             + "\nresponse: " + response
@@ -331,6 +320,9 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
                             + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
                 }
             }
+        } else
+        {
+            GeneralUtils.makeToast(getContext(), "Please ensure your device is connected to the internet!");
         }
     }
 }
