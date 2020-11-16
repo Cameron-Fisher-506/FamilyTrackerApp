@@ -22,9 +22,12 @@ public class DeviceUtils
         {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            {
+                toReturn = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 toReturn = telephonyManager.getImei();
-            } else {
+            }else{
                 toReturn = telephonyManager.getDeviceId();
             }
 
