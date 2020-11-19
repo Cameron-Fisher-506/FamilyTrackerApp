@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="za.co.familytracker">
+    package="za.co.trackmy">
 
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
@@ -24,9 +24,9 @@
             android:value="@string/map_key"></meta-data>
 
         <activity
-            android:name="za.co.familytracker.MainActivity"
+            android:name="za.co.trackmy.MainActivity"
             android:screenOrientation="portrait">
-            <tools:validation testUrl="https://cameronfisher.co.za/familytracker/" />
+            <tools:validation testUrl="https://cameronfisher.co.za/trackmy/" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,11 +42,11 @@
                 <data
                     android:scheme="https"
                     android:host="cameronfisher.co.za"
-                    android:pathPrefix="/familytracker/" />
+                    android:pathPrefix="/trackmy/" />
             </intent-filter>
         </activity>
 
-        <service android:name="za.co.familytracker.services.DeviceService" />
+        <service android:name="za.co.trackmy.services.DeviceService" />
     </application>
 
 </manifest>

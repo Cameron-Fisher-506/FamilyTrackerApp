@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Family Tracker</string>
+    <string name="app_name">Track My</string>
 
     <string name="dummy_text">dummy</string>
     <string name="me">Me</string>
     <string name="name">Name</string>
     <string name="imei">imei</string>
     <string name="device">Device</string>
+
 </resources>
