@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="za.co.trackmy">
+    package="za.co.trackmybravo">
 
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
@@ -23,7 +23,7 @@
             android:value="@string/map_key"></meta-data>
 
         <activity
-            android:name="za.co.trackmy.MainActivity"
+            android:name="za.co.trackmybravo.MainActivity"
             android:screenOrientation="portrait">
             <tools:validation testUrl="https://cameronfisher.co.za/trackmy/" />
 
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="za.co.trackmy.services.DeviceService" />
+        <service android:name="za.co.trackmybravo.services.DeviceService" />
     </application>
 
 </manifest>
