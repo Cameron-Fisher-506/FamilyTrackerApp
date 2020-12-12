@@ -29,6 +29,7 @@ import za.co.trackmy.utils.ConstantUtils;
 import za.co.trackmy.utils.DTUtils;
 import za.co.trackmy.utils.GeneralUtils;
 import za.co.trackmy.utils.LocationUtils;
+import za.co.trackmy.utils.SharedPreferencesUtils;
 import za.co.trackmy.utils.StringUtils;
 import za.co.trackmy.utils.WSCallsUtils;
 import za.co.trackmy.utils.WSCallsUtilsTaskCaller;
@@ -98,13 +99,13 @@ public class MapFrag extends Fragment implements OnMapReadyCallback, WSCallsUtil
 
     private void getDeviceUpdatedLocation()
     {
-
-        if(this.device.getImei() != null)
+        String code = this.device.getCode();
+        if(code != null)
         {
-            WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getDeviceCoordinateHealth/" + this.device.getImei(), REQ_CODE_GET_DEVICE_COORDINATE_HEALTH);
+            WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getDeviceCoordinateHealth/" + code, REQ_CODE_GET_DEVICE_COORDINATE_HEALTH);
         }else
         {
-            GeneralUtils.createAlertDialog(getContext(), this.device.getName() + "IMEI not found!", "Unable to track location!", false, null).show();
+            GeneralUtils.createAlertDialog(getContext(), this.device.getName() + "Code not found!", "Unable to track location!", false, null).show();
         }
 
     }

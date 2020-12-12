@@ -13,6 +13,7 @@ import za.co.trackmy.utils.ConstantUtils;
 import za.co.trackmy.utils.DTUtils;
 import za.co.trackmy.utils.DeviceUtils;
 import za.co.trackmy.utils.LocationUtils;
+import za.co.trackmy.utils.SharedPreferencesUtils;
 import za.co.trackmy.utils.StringUtils;
 import za.co.trackmy.utils.WSCallsUtils;
 import za.co.trackmy.utils.WSCallsUtilsTaskCaller;
@@ -49,10 +50,10 @@ public class DeviceService extends Service implements WSCallsUtilsTaskCaller
         {
             JSONObject body = new JSONObject();
 
-            String imei = DeviceUtils.getIMEI(getApplicationContext());
-            if(imei != null && locationUtils.getCurrentLocation() != null)
+            String code = SharedPreferencesUtils.getString(getApplicationContext(), SharedPreferencesUtils.MY_CODE);
+            if(code != null && locationUtils.getCurrentLocation() != null)
             {
-                body.put("imei", imei);
+                body.put("code", code);
 
                 JSONObject coordinate = new JSONObject();
                 coordinate.put("latitude", Double.toString(locationUtils.getCurrentLocation().getLatitude()));

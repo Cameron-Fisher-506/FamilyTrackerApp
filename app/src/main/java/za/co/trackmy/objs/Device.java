@@ -10,7 +10,7 @@ import za.co.trackmy.utils.DTUtils;
 public class Device
 {
     private String name;
-    private String imei;
+    private String code;
     private String createdTime;
     private Coordinate coordinate;
     private Health health;
@@ -20,9 +20,9 @@ public class Device
 
     }
 
-    public Device(String name, String imei, String createdTime, Coordinate coordinate, Health health) {
+    public Device(String name, String code, String createdTime, Coordinate coordinate, Health health) {
         this.name = name;
-        this.imei = imei;
+        this.code = code;
         this.createdTime = createdTime;
         this.coordinate = coordinate;
         this.health = health;
@@ -33,11 +33,11 @@ public class Device
     public void setName(String name) {
         this.name = name;
     }
-    public String getImei() {
-        return imei;
+    public String getCode() {
+        return code;
     }
-    public void setImei(String imei) {
-        this.imei = imei;
+    public void setCode(String code) {
+        this.code = code;
     }
     public String getCreatedTime() {
         return createdTime;
@@ -65,7 +65,7 @@ public class Device
             try
             {
                 this.name = jsonObject.has("name") ? jsonObject.getString("name") : null;
-                this.imei = jsonObject.has("imei") ? jsonObject.getString("imei") : null;
+                this.code = jsonObject.has("code") ? jsonObject.getString("code") : null;
                 this.createdTime = jsonObject.has("createdTime") ? jsonObject.getString("createdTime") : null;
 
                 if(jsonObject.has("coordinate"))
@@ -106,7 +106,7 @@ public class Device
         try
         {
             toReturn.put("name", this.name);
-            toReturn.put("imei", this.imei);
+            toReturn.put("code", this.code);
             toReturn.put("createdTime", this.createdTime);
 
             if(this.coordinate != null)

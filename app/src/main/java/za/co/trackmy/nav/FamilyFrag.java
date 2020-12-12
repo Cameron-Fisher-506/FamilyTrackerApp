@@ -35,6 +35,7 @@ import za.co.trackmy.utils.DialogUtils;
 import za.co.trackmy.utils.FragmentUtils;
 import za.co.trackmy.utils.GeneralUtils;
 import za.co.trackmy.utils.LocationUtils;
+import za.co.trackmy.utils.SharedPreferencesUtils;
 import za.co.trackmy.utils.StringUtils;
 import za.co.trackmy.utils.WSCallsUtils;
 import za.co.trackmy.utils.WSCallsUtilsTaskCaller;
@@ -67,11 +68,10 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
 
     private void getAllLinkedDevices()
     {
-        String imei = DeviceUtils.getIMEI(getContext());
-
-        if(imei != null)
+        String code = SharedPreferencesUtils.getString(getContext(), SharedPreferencesUtils.MY_CODE);
+        if(code != null)
         {
-            WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getAllLinkedDevices/" + imei, REQ_CODE_GET_ALL_LINKED_DEVICES);
+            WSCallsUtils.get(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/getAllLinkedDevices/" + code, REQ_CODE_GET_ALL_LINKED_DEVICES);
         }else
         {
             DialogUtils.createAlertPermission(getContext(), "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
@@ -254,7 +254,7 @@ public class FamilyFrag extends Fragment implements WSCallsUtilsTaskCaller
             txtName.setText(this.filteredData.get(position).getName());
 
             TextView txtImei = convertView.findViewById(R.id.txtImei);
-            txtImei.setText(this.filteredData.get(position).getImei());
+            txtImei.setText(this.filteredData.get(position).getCode());
 
             if(this.filteredData.get(position).getCoordinate() != null && this.filteredData.get(position).getCoordinate().getLatitude() != null &&
                     this.filteredData.get(position).getCoordinate().getLongitude() != null)

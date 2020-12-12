@@ -18,6 +18,7 @@ import za.co.trackmy.utils.DeviceUtils;
 import za.co.trackmy.utils.DialogUtils;
 import za.co.trackmy.utils.FragmentUtils;
 import za.co.trackmy.utils.GeneralUtils;
+import za.co.trackmy.utils.SharedPreferencesUtils;
 
 public class ShareMyLocationFrag extends Fragment
 {
@@ -26,28 +27,19 @@ public class ShareMyLocationFrag extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_share_my_location, container, false);
 
-        String imei = DeviceUtils.getIMEI(getContext());
-
-        if(imei != null)
+        String code = SharedPreferencesUtils.getString(getContext(), SharedPreferencesUtils.MY_CODE);
+        if(code != null)
         {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://cameronfisher.co.za/trackmy/" + DeviceUtils.getIMEI(getContext()));
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://cameronfisher.co.za/trackmy/" + code);
             sendIntent.setType("text/plain");
 
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);
         }else
         {
-            DialogUtils.createAlertPermission(getContext(), "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
-                @Override
-                public void checkPermission(boolean ischeckPermission) {
-                    if(ischeckPermission)
-                    {
-                        GeneralUtils.openAppSettingsScreen(getContext());
-                    }
-                }
-            }).show();
+            GeneralUtils.makeToast(getContext(), "You do not have a code!");
         }
 
         MeFrag meFrag = new MeFrag();

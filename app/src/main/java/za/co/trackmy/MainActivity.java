@@ -87,16 +87,17 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
                 if(appLinkData != null)
                 {
-                    final String imeiToLink = appLinkData.getLastPathSegment();
-                    final String imei = DeviceUtils.getIMEI(this);
+                    final String codeToLink = appLinkData.getLastPathSegment();
 
-                    if(imeiToLink != null)
+
+                    if(codeToLink != null)
                     {
-                        GeneralUtils.createAlertDialog(this, "Track Device", "Do you want to track this device (" + imeiToLink +")?", true, new LinkDeviceCallback() {
+                        GeneralUtils.createAlertDialog(this, "Track Device", "Do you want to track this device (" + codeToLink +")?", true, new LinkDeviceCallback() {
                             @Override
                             public void linkDevice(String name) {
 
-                                linkDeviceToMonitor(name, imei,imeiToLink);
+                                String myCode = SharedPreferencesUtils.getString(getApplicationContext(), SharedPreferencesUtils.MY_CODE);
+                                linkDeviceToMonitor(name, myCode,codeToLink);
 
                             }
                         }).show();
@@ -148,52 +149,41 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
     public void createDevice()
     {
-        String imei = DeviceUtils.getIMEI(this);
-        if(imei != null)
+        try
         {
-            try
+            JSONObject body = new JSONObject();
+            String code = SharedPreferencesUtils.getString(this, SharedPreferencesUtils.MY_CODE);
+            if(code != null)
             {
-                JSONObject body = new JSONObject();
-                body.put("imei", imei);
-                body.put("name", "Me");
-
-                WSCallsUtils.post(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/create", body.toString(), REQ_CODE_CREATE);
-            }catch (Exception e)
-            {
-                Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
-                        + "\nMethod: WSCallsUtils - doInBackground"
-                        + "\nIMEI: " + imei
-                        + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+                body.put("code", code);
             }
-        }else
+
+            body.put("name", "Me");
+
+            WSCallsUtils.post(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/create", body.toString(), REQ_CODE_CREATE);
+        }catch (Exception e)
         {
-            DialogUtils.createAlertPermission(this, "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
-                @Override
-                public void checkPermission(boolean ischeckPermission) {
-                    if(ischeckPermission)
-                    {
-                        GeneralUtils.openAppSettingsScreen(getApplicationContext());
-                    }
-                }
-            }).show();
+            Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                    + "\nMethod: WSCallsUtils - doInBackground"
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
         }
     }
 
-    private void linkDeviceToMonitor(String name, String imei, String imeiToLink)
+    private void linkDeviceToMonitor(String name, String code, String codeToLink)
     {
 
         if(name != null)
         {
-            if(imei != null)
+            if(code != null)
             {
-                if(imeiToLink != null)
+                if(codeToLink != null)
                 {
                     try
                     {
                         JSONObject body = new JSONObject();
                         body.put("name", name);
-                        body.put("imei", imei);
-                        body.put("imeiToLink", imeiToLink);
+                        body.put("code", code);
+                        body.put("codeToLink", codeToLink);
 
                         WSCallsUtils.post(this, StringUtils.FAMILY_TRACKER_URL + "/rest/device/linkDevice", body.toString(), REQ_CODE_LINK_DEVICE);
 
@@ -202,26 +192,18 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
                     {
                         Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
                                 + "\nMethod: WSCallsUtils - doInBackground"
-                                + "\nIMEI: " + imei
-                                + "imeiToLink: " + imeiToLink
+                                + "\ncode: " + code
+                                + "codeToLink: " + codeToLink
                                 + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
                     }
                 }else
                 {
-                    GeneralUtils.makeToast(this, "Partner's IMEI is not found!");
+                    GeneralUtils.makeToast(this, "Partner's code is not found!");
                 }
 
             }else
             {
-                DialogUtils.createAlertPermission(this, "Phone Permission", "Please enable phone and location permissions for Family Tracker.", true, new PermissionCallback() {
-                    @Override
-                    public void checkPermission(boolean ischeckPermission) {
-                        if(ischeckPermission)
-                        {
-                            GeneralUtils.openAppSettingsScreen(getApplicationContext());
-                        }
-                    }
-                }).show();
+                GeneralUtils.makeToast(this, "You do not have a code!");
             }
         }else
         {
@@ -361,7 +343,10 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
                         String message = jsonObject.getString("message");
                         if(code == 0)
                         {
-                            GeneralUtils.makeToast(this, message);
+                            String myCode = jsonObject.getString("myCode");
+                            SharedPreferencesUtils.save(this, SharedPreferencesUtils.MY_CODE, myCode);
+
+                            GeneralUtils.makeToast(this, "Saved Code!");
                         }else if(code == -1)
                         {
                             GeneralUtils.makeToast(this, message);

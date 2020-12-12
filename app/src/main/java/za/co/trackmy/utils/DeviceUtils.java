@@ -4,47 +4,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
-import android.os.Build;
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import static android.content.Context.BATTERY_SERVICE;
 
 public class DeviceUtils
 {
-    public static String getIMEI(Context context)
-    {
-        String toReturn = null;
-
-        try
-        {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            {
-                toReturn = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                toReturn = telephonyManager.getImei();
-            }else{
-                toReturn = telephonyManager.getDeviceId();
-            }
-
-        }catch(SecurityException e) // What exception?
-        {
-            Log.d(ConstantUtils.TAG, "\n\nClass: DeviceUtils" +
-                    "\nMethod: getIMEI" +
-                    "\nError: " + e.getMessage() +
-                    "\nCreatedTime: " + DTUtils.getCurrentDateTime());
-        }catch (Exception e)
-        {
-            Log.d(ConstantUtils.TAG, "\n\nClass: DeviceUtils" +
-                    "\nMethod: getIMEI" +
-                    "\nError: " + e.getMessage() +
-                    "\nCreatedTime: " + DTUtils.getCurrentDateTime());
-        }
-
-        return toReturn;
-    }
 
     public static String getBatteryLevel(Context context)
     {
